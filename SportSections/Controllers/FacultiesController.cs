@@ -48,7 +48,7 @@ namespace SportSections.Controllers
         // GET: Faculties/Create
         public IActionResult Create()
         {
-            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "Address");
+            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "FullName");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace SportSections.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "Address", faculty.UniversityId);
+            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "FullName", faculty.UniversityId);
             return View(faculty);
         }
 
@@ -82,7 +82,7 @@ namespace SportSections.Controllers
             {
                 return NotFound();
             }
-            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "Address", faculty.UniversityId);
+            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "FullName", faculty.UniversityId);
             return View(faculty);
         }
 
@@ -118,7 +118,7 @@ namespace SportSections.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "Address", faculty.UniversityId);
+            ViewData["UniversityId"] = new SelectList(_context.Universities, "UniversityId", "FullName", faculty.UniversityId);
             return View(faculty);
         }
 

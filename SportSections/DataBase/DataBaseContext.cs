@@ -23,10 +23,12 @@ namespace SportSections.DataBase
         public DbSet<StudentSection> StudentSections { get; set; }
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<University> Universities { get; set; }
+        public DbSet<TrainerSection> TrainerSections { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-I75L3P7;Database=SportSectionsIHE;Trusted_Connection=True;Encrypt=False;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-KIV92L3;Database=SportSectionsIHE;Trusted_Connection=True;Encrypt=False;");
+            // optionsBuilder.UseSqlServer("Server=DESKTOP-I75L3P7;Database=SportSectionsIHE;Trusted_Connection=True;Encrypt=False;");
             // optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SportSectionsIHE;Trusted_Connection=True;");
         }
     }

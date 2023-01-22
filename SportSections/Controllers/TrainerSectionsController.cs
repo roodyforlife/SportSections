@@ -10,23 +10,23 @@ using SportSections.Models;
 
 namespace SportSections.Controllers
 {
-    public class StudentSectionsController : Controller
+    public class TrainerSectionsController : Controller
     {
         private readonly DataBaseContext _context;
 
-        public StudentSectionsController(DataBaseContext context)
+        public TrainerSectionsController(DataBaseContext context)
         {
             _context = context;
         }
 
-        // GET: StudentSections
+        // GET: TrainerSections
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.StudentSections.Include(s => s.Section).Include(s => s.Student);
+            var dataBaseContext = _context.TrainerSections.Include(t => t.Section).Include(t => t.Trainer);
             return View(await dataBaseContext.ToListAsync());
         }
 
-        // GET: StudentSections/Details/5
+        // GET: TrainerSections/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +34,45 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var studentSection = await _context.StudentSections
-                .Include(s => s.Section)
-                .Include(s => s.Student)
-                .FirstOrDefaultAsync(m => m.StudentSectionId == id);
-            if (studentSection == null)
+            var trainerSection = await _context.TrainerSections
+                .Include(t => t.Section)
+                .Include(t => t.Trainer)
+                .FirstOrDefaultAsync(m => m.TrainerSectionId == id);
+            if (trainerSection == null)
             {
                 return NotFound();
             }
 
-            return View(studentSection);
+            return View(trainerSection);
         }
 
-        // GET: StudentSections/Create
+        // GET: TrainerSections/Create
         public IActionResult Create()
         {
             ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Name");
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "Email");
+            ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "Email");
             return View();
         }
 
-        // POST: StudentSections/Create
+        // POST: TrainerSections/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentSectionId,StudentId,SectionId")] StudentSection studentSection)
+        public async Task<IActionResult> Create([Bind("TrainerSectionId,SectionId,TrainerId")] TrainerSection trainerSection)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(studentSection);
+                _context.Add(trainerSection);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Name", studentSection.SectionId);
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "Email", studentSection.StudentId);
-            return View(studentSection);
+            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Name", trainerSection.SectionId);
+            ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "Email", trainerSection.TrainerId);
+            return View(trainerSection);
         }
 
-        // GET: StudentSections/Edit/5
+        // GET: TrainerSections/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,24 +80,24 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var studentSection = await _context.StudentSections.FindAsync(id);
-            if (studentSection == null)
+            var trainerSection = await _context.TrainerSections.FindAsync(id);
+            if (trainerSection == null)
             {
                 return NotFound();
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Name", studentSection.SectionId);
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "Email", studentSection.StudentId);
-            return View(studentSection);
+            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Name", trainerSection.SectionId);
+            ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "Email", trainerSection.TrainerId);
+            return View(trainerSection);
         }
 
-        // POST: StudentSections/Edit/5
+        // POST: TrainerSections/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentSectionId,StudentId,SectionId")] StudentSection studentSection)
+        public async Task<IActionResult> Edit(int id, [Bind("TrainerSectionId,SectionId,TrainerId")] TrainerSection trainerSection)
         {
-            if (id != studentSection.StudentSectionId)
+            if (id != trainerSection.TrainerSectionId)
             {
                 return NotFound();
             }
@@ -106,12 +106,12 @@ namespace SportSections.Controllers
             {
                 try
                 {
-                    _context.Update(studentSection);
+                    _context.Update(trainerSection);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentSectionExists(studentSection.StudentSectionId))
+                    if (!TrainerSectionExists(trainerSection.TrainerSectionId))
                     {
                         return NotFound();
                     }
@@ -122,12 +122,12 @@ namespace SportSections.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Name", studentSection.SectionId);
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "Email", studentSection.StudentId);
-            return View(studentSection);
+            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Name", trainerSection.SectionId);
+            ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "Email", trainerSection.TrainerId);
+            return View(trainerSection);
         }
 
-        // GET: StudentSections/Delete/5
+        // GET: TrainerSections/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,32 +135,32 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var studentSection = await _context.StudentSections
-                .Include(s => s.Section)
-                .Include(s => s.Student)
-                .FirstOrDefaultAsync(m => m.StudentSectionId == id);
-            if (studentSection == null)
+            var trainerSection = await _context.TrainerSections
+                .Include(t => t.Section)
+                .Include(t => t.Trainer)
+                .FirstOrDefaultAsync(m => m.TrainerSectionId == id);
+            if (trainerSection == null)
             {
                 return NotFound();
             }
 
-            return View(studentSection);
+            return View(trainerSection);
         }
 
-        // POST: StudentSections/Delete/5
+        // POST: TrainerSections/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var studentSection = await _context.StudentSections.FindAsync(id);
-            _context.StudentSections.Remove(studentSection);
+            var trainerSection = await _context.TrainerSections.FindAsync(id);
+            _context.TrainerSections.Remove(trainerSection);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentSectionExists(int id)
+        private bool TrainerSectionExists(int id)
         {
-            return _context.StudentSections.Any(e => e.StudentSectionId == id);
+            return _context.TrainerSections.Any(e => e.TrainerSectionId == id);
         }
     }
 }

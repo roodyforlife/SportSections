@@ -22,8 +22,7 @@ namespace SportSections.Controllers
         // GET: Trainers
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.Trainers.Include(t => t.Section);
-            return View(await dataBaseContext.ToListAsync());
+            return View(await _context.Trainers.ToListAsync());
         }
 
         // GET: Trainers/Details/5
@@ -35,7 +34,6 @@ namespace SportSections.Controllers
             }
 
             var trainer = await _context.Trainers
-                .Include(t => t.Section)
                 .FirstOrDefaultAsync(m => m.TrainerId == id);
             if (trainer == null)
             {
@@ -48,7 +46,6 @@ namespace SportSections.Controllers
         // GET: Trainers/Create
         public IActionResult Create()
         {
-            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Address");
             return View();
         }
 
@@ -57,7 +54,7 @@ namespace SportSections.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TrainerId,Name,Surname,Patronymic,Birthday,Phone,Email,Address,AdmissionDate,Experience,SectionId")] Trainer trainer)
+        public async Task<IActionResult> Create([Bind("TrainerId,Name,Surname,Patronymic,Birthday,Phone,Email,Address,AdmissionDate,Experience")] Trainer trainer)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +62,6 @@ namespace SportSections.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Address", trainer.SectionId);
             return View(trainer);
         }
 
@@ -82,7 +78,6 @@ namespace SportSections.Controllers
             {
                 return NotFound();
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Address", trainer.SectionId);
             return View(trainer);
         }
 
@@ -91,7 +86,7 @@ namespace SportSections.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TrainerId,Name,Surname,Patronymic,Birthday,Phone,Email,Address,AdmissionDate,Experience,SectionId")] Trainer trainer)
+        public async Task<IActionResult> Edit(int id, [Bind("TrainerId,Name,Surname,Patronymic,Birthday,Phone,Email,Address,AdmissionDate,Experience")] Trainer trainer)
         {
             if (id != trainer.TrainerId)
             {
@@ -118,7 +113,6 @@ namespace SportSections.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "SectionId", "Address", trainer.SectionId);
             return View(trainer);
         }
 
@@ -131,7 +125,6 @@ namespace SportSections.Controllers
             }
 
             var trainer = await _context.Trainers
-                .Include(t => t.Section)
                 .FirstOrDefaultAsync(m => m.TrainerId == id);
             if (trainer == null)
             {

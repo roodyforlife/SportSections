@@ -36,7 +36,6 @@ namespace SportSections.Models
         [Display(Name = "Experience (months)")]
         [Required(ErrorMessage = "Empty field")]
         public int Experience { get; set; }
-        public Section Section { get; set; }
-        public int SectionId { get; set; }
+        public List<TrainerSection> TrainerSections { get; set; }
     }
 }

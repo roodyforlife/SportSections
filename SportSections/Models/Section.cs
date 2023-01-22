@@ -19,7 +19,13 @@ namespace SportSections.Models
         [Display(Name = "Floor number")]
         [Required(ErrorMessage = "Empty field")]
         public int Floor { get; set; }
+        [Display(Name = "Start date")]
+        [Required(ErrorMessage = "Empty field")]
+        public DateTime StartDate { get; set; }
+        [Display(Name = "Finish date")]
+        [Required(ErrorMessage = "Empty field")]
+        public DateTime FinishDate { get; set; }
         public List<StudentSection> StudentSections { get; set; }
-        public List<Trainer> Trainers { get; set; }
+        public List<TrainerSection> TrainerSections { get; set; }
     }
 }

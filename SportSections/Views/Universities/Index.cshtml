@@ -6,42 +6,51 @@
 
 <h1>Index</h1>
 
+<div class="form-group">
+    <button class="btn btn-primary" onclick="createPDF('Universities')">Print report</button>
+</div>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ShortName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShortName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UniversityId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UniversityId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UniversityId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div id="print">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShortName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th class="createPdfBlock"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShortName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td class="createPdfBlock">
+                        <a asp-action="Edit" asp-route-id="@item.UniversityId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.UniversityId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.UniversityId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

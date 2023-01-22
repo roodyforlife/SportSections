@@ -6,107 +6,114 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>Group</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GroupName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GroupName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreateDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Departament)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Departament.FullName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.GroupId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="form-group">
+    <button class="btn btn-primary" onclick="createPDF('Details about Group @Model.GroupName')">Print report</button>
 </div>
 
-<h4>Students of group</h4>
+<div id="print">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().StudentName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().StudentSurname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().StudentPatronymic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().Birthday)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().AdmissionDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().Group)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Students)
-        {
+    <div>
+        <h4>Group</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.GroupName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.GroupName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreateDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Departament)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Departament.FullName)
+            </dd>
+        </dl>
+    </div>
+    <div class="createPdfBlock">
+        <a asp-action="Edit" asp-route-id="@Model.GroupId">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    <h4>Students of group</h4>
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentSurname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentPatronymic)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Birthday)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AdmissionDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Group.GroupName)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-controller="Students" asp-route-id="@item.StudentId">Edit</a> |
-                    <a asp-action="Details" asp-controller="Students" asp-route-id="@item.StudentId">Details</a> |
-                    <a asp-action="Delete" asp-controller="Students" asp-route-id="@item.StudentId">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().StudentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().StudentSurname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().StudentPatronymic)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Birthday)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().AdmissionDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Students.First().Group)
+                </th>
+                <th class="createPdfBlock"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Students)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentSurname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentPatronymic)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Birthday)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AdmissionDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Group.GroupName)
+                    </td>
+                    <td class="createPdfBlock">
+                        <a asp-action="Edit" asp-controller="Students" asp-route-id="@item.StudentId">Edit</a> |
+                        <a asp-action="Details" asp-controller="Students" asp-route-id="@item.StudentId">Details</a> |
+                        <a asp-action="Delete" asp-controller="Students" asp-route-id="@item.StudentId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

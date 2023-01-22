@@ -10,23 +10,22 @@ using SportSections.Models;
 
 namespace SportSections.Controllers
 {
-    public class GroupsController : Controller
+    public class UniversitiesController : Controller
     {
         private readonly DataBaseContext _context;
 
-        public GroupsController(DataBaseContext context)
+        public UniversitiesController(DataBaseContext context)
         {
             _context = context;
         }
 
-        // GET: Groups
+        // GET: Universities
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.Groups.Include(x => x.Departament);
-            return View(await dataBaseContext.ToListAsync());
+            return View(await _context.Universities.ToListAsync());
         }
 
-        // GET: Groups/Details/5
+        // GET: Universities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
-                .Include(x => x.Departament)
-                .FirstOrDefaultAsync(m => m.GroupId == id);
-            if (@group == null)
+            var university = await _context.Universities
+                .FirstOrDefaultAsync(m => m.UniversityId == id);
+            if (university == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(university);
         }
 
-        // GET: Groups/Create
+        // GET: Universities/Create
         public IActionResult Create()
         {
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName");
             return View();
         }
 
-        // POST: Groups/Create
+        // POST: Universities/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group @group)
+        public async Task<IActionResult> Create([Bind("UniversityId,ShortName,FullName,Address")] University university)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@group);
+                _context.Add(university);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            return View(university);
         }
 
-        // GET: Groups/Edit/5
+        // GET: Universities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups.FindAsync(id);
-            if (@group == null)
+            var university = await _context.Universities.FindAsync(id);
+            if (university == null)
             {
                 return NotFound();
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            return View(university);
         }
 
-        // POST: Groups/Edit/5
+        // POST: Universities/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("UniversityId,ShortName,FullName,Address")] University university)
         {
-            if (id != @group.GroupId)
+            if (id != university.UniversityId)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace SportSections.Controllers
             {
                 try
                 {
-                    _context.Update(@group);
+                    _context.Update(university);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GroupExists(@group.GroupId))
+                    if (!UniversityExists(university.UniversityId))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace SportSections.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            return View(university);
         }
 
-        // GET: Groups/Delete/5
+        // GET: Universities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,31 +124,30 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
-                .Include(x => x.Departament)
-                .FirstOrDefaultAsync(m => m.GroupId == id);
-            if (@group == null)
+            var university = await _context.Universities
+                .FirstOrDefaultAsync(m => m.UniversityId == id);
+            if (university == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(university);
         }
 
-        // POST: Groups/Delete/5
+        // POST: Universities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @group = await _context.Groups.FindAsync(id);
-            _context.Groups.Remove(@group);
+            var university = await _context.Universities.FindAsync(id);
+            _context.Universities.Remove(university);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GroupExists(int id)
+        private bool UniversityExists(int id)
         {
-            return _context.Groups.Any(e => e.GroupId == id);
+            return _context.Universities.Any(e => e.UniversityId == id);
         }
     }
 }

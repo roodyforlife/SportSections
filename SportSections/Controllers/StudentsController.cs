@@ -10,23 +10,23 @@ using SportSections.Models;
 
 namespace SportSections.Controllers
 {
-    public class GroupsController : Controller
+    public class StudentsController : Controller
     {
         private readonly DataBaseContext _context;
 
-        public GroupsController(DataBaseContext context)
+        public StudentsController(DataBaseContext context)
         {
             _context = context;
         }
 
-        // GET: Groups
+        // GET: Students
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.Groups.Include(x => x.Departament);
+            var dataBaseContext = _context.Students.Include(s => s.Group);
             return View(await dataBaseContext.ToListAsync());
         }
 
-        // GET: Groups/Details/5
+        // GET: Students/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +34,42 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
-                .Include(x => x.Departament)
-                .FirstOrDefaultAsync(m => m.GroupId == id);
-            if (@group == null)
+            var student = await _context.Students
+                .Include(s => s.Group)
+                .FirstOrDefaultAsync(m => m.StudentId == id);
+            if (student == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(student);
         }
 
-        // GET: Groups/Create
+        // GET: Students/Create
         public IActionResult Create()
         {
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName");
+            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupName");
             return View();
         }
 
-        // POST: Groups/Create
+        // POST: Students/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group @group)
+        public async Task<IActionResult> Create([Bind("StudentId,StudentName,StudentSurname,StudentPatronymic,Birthday,Phone,Email,Address,AdmissionDate,GroupId")] Student student)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@group);
+                _context.Add(student);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupName", student.GroupId);
+            return View(student);
         }
 
-        // GET: Groups/Edit/5
+        // GET: Students/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +77,23 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups.FindAsync(id);
-            if (@group == null)
+            var student = await _context.Students.FindAsync(id);
+            if (student == null)
             {
                 return NotFound();
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupName", student.GroupId);
+            return View(student);
         }
 
-        // POST: Groups/Edit/5
+        // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentName,StudentSurname,StudentPatronymic,Birthday,Phone,Email,Address,AdmissionDate,GroupId")] Student student)
         {
-            if (id != @group.GroupId)
+            if (id != student.StudentId)
             {
                 return NotFound();
             }
@@ -102,12 +102,12 @@ namespace SportSections.Controllers
             {
                 try
                 {
-                    _context.Update(@group);
+                    _context.Update(student);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GroupExists(@group.GroupId))
+                    if (!StudentExists(student.StudentId))
                     {
                         return NotFound();
                     }
@@ -118,11 +118,11 @@ namespace SportSections.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            ViewData["GroupId"] = new SelectList(_context.Groups, "GroupId", "GroupName", student.GroupId);
+            return View(student);
         }
 
-        // GET: Groups/Delete/5
+        // GET: Students/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,31 +130,31 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
-                .Include(x => x.Departament)
-                .FirstOrDefaultAsync(m => m.GroupId == id);
-            if (@group == null)
+            var student = await _context.Students
+                .Include(s => s.Group)
+                .FirstOrDefaultAsync(m => m.StudentId == id);
+            if (student == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(student);
         }
 
-        // POST: Groups/Delete/5
+        // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @group = await _context.Groups.FindAsync(id);
-            _context.Groups.Remove(@group);
+            var student = await _context.Students.FindAsync(id);
+            _context.Students.Remove(student);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GroupExists(int id)
+        private bool StudentExists(int id)
         {
-            return _context.Groups.Any(e => e.GroupId == id);
+            return _context.Students.Any(e => e.StudentId == id);
         }
     }
 }

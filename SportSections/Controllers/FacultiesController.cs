@@ -36,6 +36,7 @@ namespace SportSections.Controllers
 
             var faculty = await _context.Faculties
                 .Include(f => f.University)
+                .Include(x => x.Departaments)
                 .FirstOrDefaultAsync(m => m.FacultyId == id);
             if (faculty == null)
             {
@@ -132,7 +133,6 @@ namespace SportSections.Controllers
 
             var faculty = await _context.Faculties
                 .Include(f => f.University)
-                .Include(x => x.Departaments)
                 .FirstOrDefaultAsync(m => m.FacultyId == id);
             if (faculty == null)
             {

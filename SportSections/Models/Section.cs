@@ -11,10 +11,10 @@ namespace SportSections.Models
         public int SectionId { get; set; }
         [Display(Name = "Section name")]
         [Required(ErrorMessage = "Empty field")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "Invalid length")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "Invalid length")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Empty field")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "Invalid length")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "Invalid length")]
         public string Address { get; set; }
         [Display(Name = "Floor number")]
         [Required(ErrorMessage = "Empty field")]

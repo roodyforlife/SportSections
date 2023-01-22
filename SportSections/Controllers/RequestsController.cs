@@ -21,28 +21,35 @@ namespace SportSections.Controllers
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-                SqlCommand command = new SqlCommand(request, connection);
-                var result = new RequestViewModel();
-                var reader = command.ExecuteReader();
-                result.Displays = new string[reader.FieldCount];
-                for (int i = 0; i < reader.FieldCount; i++)
+                try
                 {
-                    result.Displays[i] = reader.GetName(i);
-                }
-
-                while (reader.Read())
-                {
-                    string[] value = new string[reader.FieldCount];
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(request, connection);
+                    var result = new RequestViewModel();
+                    var reader = command.ExecuteReader();
+                    result.Displays = new string[reader.FieldCount];
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        value[i] = reader.GetValue(i).ToString();
+                        result.Displays[i] = reader.GetName(i);
                     }
 
-                    result.Result.Add(value);
-                }
+                    while (reader.Read())
+                    {
+                        string[] value = new string[reader.FieldCount];
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            value[i] = reader.GetValue(i).ToString();
+                        }
 
-                return View(result);
+                        result.Result.Add(value);
+                    }
+
+                    return View(result);
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
         }
     }

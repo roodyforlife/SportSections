@@ -8,7 +8,6 @@ namespace SportSections.Models
 {
     public class TrainerSection
     {
-        [Key]
         public int TrainerSectionId { get; set; }
         public Section Section { get; set; }
         public int SectionId { get; set; }

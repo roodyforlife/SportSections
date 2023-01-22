@@ -4,15 +4,35 @@
 
 <div class="text-center">
     <div class="form-group">
-        <a class="btn btn-primary" asp-action="Request" asp-route-request="" asp-controller="Requests">Departaments</a>
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Universities.FullName as University_Name, Universities.Address as Univesity_Address, COUNT(Groups.GroupId) as Count_of_groups from Universities
+left join Faculties on Faculties.UniversityId = Universities.UniversityId
+left join Departaments on Departaments.FacultyId = Faculties.FacultyId
+left join Groups on Groups.DepartamentId = Departaments.DepartamentId
+Group by Universities.FullName, Universities.Address" asp-controller="Requests">Запит на отримання університетів та кількості груп у даному унівеситеті</a>
     </div>
     <div class="form-group">
-        <a class="btn btn-primary" asp-action="Request" asp-route-request="" asp-controller="Requests">Departaments</a>
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Trainers.Name, Trainers.Surname, Trainers.Patronymic, Trainers.Email, Trainers.Address, COUNT(Sections.SectionId) as Count_sections_of_trainer from Trainers
+left join TrainerSections on TrainerSections.TrainerId = Trainers.TrainerId
+left join Sections on Sections.SectionId = TrainerSections.SectionId
+group by Trainers.Name, Trainers.Surname, Trainers.Patronymic, Trainers.Email, Trainers.Address" asp-controller="Requests">Запит на отримання тренерів, в результаті чого буде виведено ім'я, прізвище, по батькові, електронну пошту, адресу тренера, а також кількість секцій, в якій тренує даний тренер</a>
     </div>
     <div class="form-group">
-        <a class="btn btn-primary" asp-action="Request" asp-route-request="" asp-controller="Requests">Departaments</a>
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Groups.GroupId, Groups.GroupName, COUNT(Students.StudentId) as Count_of_students_in_group,
+case when (COUNT(Students.StudentId) > 30)
+then
+'More then 30'
+else
+'Less than 30 students'
+end as
+'Information'
+from Groups
+left join Students on Students.GroupId = Groups.GroupId
+group by Groups.GroupId, Groups.GroupName" asp-controller="Requests">Запит на отримання груп. В запиті буде виведено ІД групи, назва групи, кількість студентів у даній групі та інформацію про студентів (Меньше 30 студентів або більше 30 студентів)</a>
     </div>
     <div class="form-group">
-        <a class="btn btn-primary" asp-action="Request" asp-route-request="" asp-controller="Requests">Departaments</a>
+        <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Sections.Name, Sections.Address, Sections.StartDate, Sections.FinishDate, COUNT(Students.StudentId) as Count_of_students_in_section from Sections
+left join StudentSections on StudentSections.SectionId = Sections.SectionId
+left join Students on Students.StudentId = StudentSections.StudentId
+group by Sections.Name, Sections.Address, Sections.StartDate, Sections.FinishDate" asp-controller="Requests">Запит на отримання секцій, де буде вивведено назву секції, адресу, початок та кінець (дата) секції та кількість студентів, які тренуються у даній секції</a>
     </div>
 </div>

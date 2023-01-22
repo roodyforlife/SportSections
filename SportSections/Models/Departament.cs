@@ -15,7 +15,7 @@ namespace SportSections.Models
         public string ShortName { get; set; }
         [Display(Name = "Departament full name")]
         [Required(ErrorMessage = "Empty field")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "Invalid length")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "Invalid length")]
         public string FullName { get; set; }
         public Faculty Faculty { get; set; }
         public int FacultyId { get; set; }

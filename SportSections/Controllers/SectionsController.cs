@@ -39,11 +39,11 @@ namespace SportSections.Controllers
 
             if (dateTo.Year == 1)
             {
-                dateTo = DateTime.Now;
+                dateTo = DateTime.Now.AddDays(1);
             }
 
             sections = sections.Where(x => x.StartDate >= dateFrom);
-            sections = sections.Where(x => x.FinishDate <= dateTo);
+            sections = sections.Where(x => x.StartDate <= dateTo);
 
             switch (sort)
             {

@@ -34,7 +34,7 @@ namespace SportSections.Controllers
 
             if (dateTo.Year == 1)
             {
-                dateTo = DateTime.Now;
+                dateTo = DateTime.Now.AddDays(1);
             }
 
             dataBaseContext = dataBaseContext.Where(x => x.CreateDate <= dateTo);

@@ -63,7 +63,7 @@
                     @Html.DisplayFor(modelItem => item.FullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.University.Address)
+                    @Html.DisplayFor(modelItem => item.University.ShortName)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-controller="Faculties" asp-route-id="@item.FacultyId">Edit</a> |

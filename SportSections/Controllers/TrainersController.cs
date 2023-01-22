@@ -34,12 +34,12 @@ namespace SportSections.Controllers
 
             if (!String.IsNullOrEmpty(name))
             {
-                trainers = trainers.Where(x => x.Name.Contains(email) || x.Surname.Contains(name) || x.Patronymic.Contains(name));
+                trainers = trainers.Where(x => x.Name.Contains(name) || x.Surname.Contains(name) || x.Patronymic.Contains(name));
             }
 
             if (birthdayTo.Year == 1)
             {
-                birthdayTo = DateTime.Now;
+                birthdayTo = DateTime.Now.AddDays(1);
             }
 
             trainers = trainers.Where(x => x.Birthday >= birthdayFrom);

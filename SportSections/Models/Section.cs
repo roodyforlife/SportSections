@@ -16,11 +16,7 @@ namespace SportSections.Models
         [Required(ErrorMessage = "Empty field")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "Invalid length")]
         public string Address { get; set; }
-        [Display(Name = "Section short name")]
-        [Required(ErrorMessage = "Empty field")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "Invalid length")]
-        public string SportName { get; set; }
-        [Display(Name = "Count of floor")]
+        [Display(Name = "Floor number")]
         [Required(ErrorMessage = "Empty field")]
         public int Floor { get; set; }
         public List<StudentSection> StudentSections { get; set; }

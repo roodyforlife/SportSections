@@ -54,7 +54,7 @@ namespace SportSections.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SectionId,Name,Address,SportName,Floor")] Section section)
+        public async Task<IActionResult> Create([Bind("SectionId,Name,Address,Floor")] Section section)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace SportSections.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SectionId,Name,Address,SportName,Floor")] Section section)
+        public async Task<IActionResult> Edit(int id, [Bind("SectionId,Name,Address,Floor")] Section section)
         {
             if (id != section.SectionId)
             {

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportSections.DataBase;
+using SportSections.Enums;
 using SportSections.Models;
 
 namespace SportSections.Controllers
@@ -20,9 +23,67 @@ namespace SportSections.Controllers
         }
 
         // GET: Trainers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string email, string name, DateTime birthdayFrom, DateTime birthdayTo, TrainerSort sort = TrainerSort.EmailAsc)
         {
-            return View(await _context.Trainers.ToListAsync());
+            IQueryable<Trainer> trainers = _context.Trainers;
+
+            if (!String.IsNullOrEmpty(email))
+            {
+                trainers = trainers.Where(x => x.Email.Contains(email));
+            }
+
+            if (!String.IsNullOrEmpty(name))
+            {
+                trainers = trainers.Where(x => x.Name.Contains(email) || x.Surname.Contains(name) || x.Patronymic.Contains(name));
+            }
+
+            if (birthdayTo.Year == 1)
+            {
+                birthdayTo = DateTime.Now;
+            }
+
+            trainers = trainers.Where(x => x.Birthday >= birthdayFrom);
+            trainers = trainers.Where(x => x.Birthday <= birthdayTo);
+
+            switch (sort)
+            {
+                case TrainerSort.NameAsc:
+                    trainers = trainers.OrderBy(x => x.Name);
+                    break;
+                case TrainerSort.SurnameAsc:
+                    trainers = trainers.OrderBy(x => x.Surname);
+                    break;
+                case TrainerSort.PatronymicAsc:
+                    trainers = trainers.OrderBy(x => x.Patronymic);
+                    break;
+                case TrainerSort.EmailDesc:
+                    trainers = trainers.OrderByDescending(x => x.Email);
+                    break;
+                case TrainerSort.ExperienceAsc:
+                    trainers = trainers.OrderBy(x => x.Experience);
+                    break;
+                default:
+                    trainers = trainers.OrderBy(x => x.Email);
+                    break;
+            }
+
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(TrainerSort)).Cast<TrainerSort>()
+                .Select(x => new SelectListItem
+                {
+                    Text = x.GetType()
+            .GetMember(x.ToString())
+            .FirstOrDefault()
+            .GetCustomAttribute<DisplayAttribute>()?
+            .GetName(),
+                    Value = x.ToString(),
+                    Selected = (x == sort)
+                }).ToList();
+
+            ViewBag.Name = name;
+            ViewBag.Email = email;
+            ViewBag.BirthdayFrom = birthdayFrom;
+            ViewBag.BirthdayTo = birthdayTo;
+            return View(await trainers.ToListAsync());
         }
 
         // GET: Trainers/Details/5

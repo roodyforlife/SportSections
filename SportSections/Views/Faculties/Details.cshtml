@@ -10,23 +10,35 @@
     <h4>Faculty</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ShortName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ShortName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FullName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FullName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.University)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.University.Address)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.University.Address)
+        </dd>
+        <dt class="col-sm-2">
+            University short name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.University.ShortName)
+        </dd>
+        <dt class="col-sm-2">
+            University full name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.University.FullName)
         </dd>
     </dl>
 </div>
@@ -34,3 +46,44 @@
     <a asp-action="Edit" asp-route-id="@Model.FacultyId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<h4>Departemts of faculty</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Departaments.First().ShortName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Departaments.First().FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Departaments.First().Faculty)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Departaments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShortName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Faculty.FullName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-controller="Departments" asp-route-id="@item.DepartamentId">Edit</a> |
+                    <a asp-action="Details" asp-controller="Departments" asp-route-id="@item.DepartamentId">Details</a> |
+                    <a asp-action="Delete" asp-controller="Departments" asp-route-id="@item.DepartamentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

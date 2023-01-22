@@ -20,9 +20,15 @@ namespace SportSections.Controllers
         }
 
         // GET: Departaments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string name)
         {
-            var dataBaseContext = _context.Departaments.Include(d => d.Faculty);
+            IQueryable<Departament> dataBaseContext = _context.Departaments.Include(d => d.Faculty);
+
+            if (!String.IsNullOrEmpty(name))
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.ShortName.Contains(name) || x.FullName.Contains(name));
+            }
+
             return View(await dataBaseContext.ToListAsync());
         }
 
@@ -36,6 +42,7 @@ namespace SportSections.Controllers
 
             var departament = await _context.Departaments
                 .Include(d => d.Faculty)
+                .Include(x => x.Groups)
                 .FirstOrDefaultAsync(m => m.DepartamentId == id);
             if (departament == null)
             {

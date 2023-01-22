@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportSections.DataBase;
+using SportSections.Enums;
 using SportSections.Models;
 
 namespace SportSections.Controllers
@@ -20,9 +23,65 @@ namespace SportSections.Controllers
         }
 
         // GET: Sections
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string name, string address, DateTime dateFrom, DateTime dateTo, SectionSort sort = SectionSort.NameAsc)
         {
-            return View(await _context.Sections.ToListAsync());
+            IQueryable<Section> sections = _context.Sections;
+
+            if (!String.IsNullOrEmpty(name))
+            {
+                sections = sections.Where(x => x.Name.Contains(name));
+            }
+
+            if (!String.IsNullOrEmpty(address))
+            {
+                sections = sections.Where(x => x.Address.Contains(address));
+            }
+
+            if (dateTo.Year == 1)
+            {
+                dateTo = DateTime.Now;
+            }
+
+            sections = sections.Where(x => x.StartDate >= dateFrom);
+            sections = sections.Where(x => x.FinishDate <= dateTo);
+
+            switch (sort)
+            {
+                case SectionSort.NameDesc:
+                    sections = sections.OrderByDescending(x => x.Name);
+                    break;
+                case SectionSort.AddressAsc:
+                    sections = sections.OrderBy(x => x.Address);
+                    break;
+                case SectionSort.AddressDesc:
+                    sections = sections.OrderByDescending(x => x.Address);
+                    break;
+                case SectionSort.FloorAsc:
+                    sections = sections.OrderBy(x => x.Floor);
+                    break;
+                default:
+                    sections = sections.OrderBy(x => x.Name);
+                    break;
+            }
+
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(SectionSort)).Cast<SectionSort>()
+                .Select(x => new SelectListItem
+                {
+                    Text = x.GetType()
+            .GetMember(x.ToString())
+            .FirstOrDefault()
+            .GetCustomAttribute<DisplayAttribute>()?
+            .GetName(),
+                    Value = x.ToString(),
+                    Selected = (x == sort)
+                }).ToList();
+
+            ViewBag.Name = name;
+            ViewBag.Address = address;
+            ViewBag.DateFrom = dateFrom;
+            ViewBag.DateTo = dateTo;
+
+            return View(await sections.ToListAsync());
         }
 
         // GET: Sections/Details/5

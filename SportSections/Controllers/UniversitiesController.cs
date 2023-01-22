@@ -34,6 +34,7 @@ namespace SportSections.Controllers
             }
 
             var university = await _context.Universities
+                .Include(x => x.Faculties)
                 .FirstOrDefaultAsync(m => m.UniversityId == id);
             if (university == null)
             {

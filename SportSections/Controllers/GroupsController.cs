@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportSections.DataBase;
+using SportSections.Enums;
 using SportSections.Models;
 
 namespace SportSections.Controllers
@@ -20,9 +23,55 @@ namespace SportSections.Controllers
         }
 
         // GET: Groups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string name, DateTime dateFrom, DateTime dateTo, GroupSort sort = GroupSort.NameAsc)
         {
-            var dataBaseContext = _context.Groups.Include(x => x.Departament);
+            IQueryable<Group> dataBaseContext = _context.Groups.Include(x => x.Departament);
+
+            if (!String.IsNullOrEmpty(name))
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.GroupName.Contains(name));
+            }
+
+            if (dateTo.Year == 1)
+            {
+                dateTo = DateTime.Now;
+            }
+
+            dataBaseContext = dataBaseContext.Where(x => x.CreateDate <= dateTo);
+            dataBaseContext = dataBaseContext.Where(x => x.CreateDate >= dateFrom);
+
+            switch (sort)
+            {
+                case GroupSort.NameDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.GroupName);
+                    break;
+                case GroupSort.DateAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.CreateDate);
+                    break;
+                case GroupSort.DateDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.CreateDate);
+                    break;
+                default:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.GroupName);
+                    break;
+            }
+
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(GroupSort)).Cast<GroupSort>()
+                .Select(x => new SelectListItem
+                {
+                    Text = x.GetType()
+            .GetMember(x.ToString())
+            .FirstOrDefault()
+            .GetCustomAttribute<DisplayAttribute>()?
+            .GetName(),
+                    Value = x.ToString(),
+                    Selected = (x == sort)
+                }).ToList();
+
+            ViewBag.Name = name;
+            ViewBag.DateFrom = dateFrom;
+            ViewBag.DateTo = dateTo;
+
             return View(await dataBaseContext.ToListAsync());
         }
 
@@ -36,6 +85,7 @@ namespace SportSections.Controllers
 
             var group = await _context.Groups
                 .Include(x => x.Departament)
+                .Include(x => x.Students)
                 .FirstOrDefaultAsync(m => m.GroupId == id);
             if (group == null)
             {

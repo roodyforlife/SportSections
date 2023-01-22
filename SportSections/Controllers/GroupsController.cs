@@ -34,15 +34,15 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
+            var group = await _context.Groups
                 .Include(x => x.Departament)
                 .FirstOrDefaultAsync(m => m.GroupId == id);
-            if (@group == null)
+            if (group == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(group);
         }
 
         // GET: Groups/Create
@@ -57,7 +57,7 @@ namespace SportSections.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group @group)
+        public async Task<IActionResult> Create([Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group group)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace SportSections.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
+            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", group.DepartamentId);
             return View(@group);
         }
 
@@ -77,13 +77,13 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups.FindAsync(id);
-            if (@group == null)
+            var group = await _context.Groups.FindAsync(id);
+            if (group == null)
             {
                 return NotFound();
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", group.DepartamentId);
+            return View(group);
         }
 
         // POST: Groups/Edit/5
@@ -91,9 +91,9 @@ namespace SportSections.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("GroupId,GroupName,CreateDate,DepartamentId")] Group group)
         {
-            if (id != @group.GroupId)
+            if (id != group.GroupId)
             {
                 return NotFound();
             }
@@ -102,12 +102,12 @@ namespace SportSections.Controllers
             {
                 try
                 {
-                    _context.Update(@group);
+                    _context.Update(group);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GroupExists(@group.GroupId))
+                    if (!GroupExists(group.GroupId))
                     {
                         return NotFound();
                     }
@@ -118,8 +118,8 @@ namespace SportSections.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", @group.DepartamentId);
-            return View(@group);
+            ViewData["DepartamentId"] = new SelectList(_context.Departaments, "DepartamentId", "FullName", group.DepartamentId);
+            return View(group);
         }
 
         // GET: Groups/Delete/5
@@ -130,15 +130,15 @@ namespace SportSections.Controllers
                 return NotFound();
             }
 
-            var @group = await _context.Groups
+            var group = await _context.Groups
                 .Include(x => x.Departament)
                 .FirstOrDefaultAsync(m => m.GroupId == id);
-            if (@group == null)
+            if (group == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            return View(group);
         }
 
         // POST: Groups/Delete/5
@@ -146,8 +146,8 @@ namespace SportSections.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @group = await _context.Groups.FindAsync(id);
-            _context.Groups.Remove(@group);
+            var group = await _context.Groups.FindAsync(id);
+            _context.Groups.Remove(group);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

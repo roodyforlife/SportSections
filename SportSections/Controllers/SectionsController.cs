@@ -93,6 +93,9 @@ namespace SportSections.Controllers
             }
 
             var section = await _context.Sections
+                .Include(x => x.StudentSections)
+                .ThenInclude(x => x.Student)
+                .ThenInclude(x => x.Group)
                 .FirstOrDefaultAsync(m => m.SectionId == id);
             if (section == null)
             {
@@ -207,6 +210,48 @@ namespace SportSections.Controllers
         private bool SectionExists(int id)
         {
             return _context.Sections.Any(e => e.SectionId == id);
+        }
+
+        public async Task<IActionResult> Automation(int? id)
+        {
+            Section section = await _context.Sections
+                .Include(x => x.StudentSections)
+                .ThenInclude(x => x.Student)
+                .Include(x => x.TrainerSections)
+                .FirstOrDefaultAsync(x => x.SectionId == id);
+
+            if (section.StudentSections.Count() < 2)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            List<StudentSection> studentSections = section.StudentSections.Skip((int)(section.StudentSections.Count() / 2)).ToList();
+            _context.RemoveRange(studentSections);
+            await _context.SaveChangesAsync();
+            foreach (StudentSection item in studentSections)
+            {
+                item.StudentSectionId = 0;
+            }
+
+            _context.Update(section);
+            await _context.AddRangeAsync(studentSections);
+
+            Section newSection = new Section()
+            {
+                Name = section.Name + "2",
+                Address = section.Address,
+                Floor = section.Floor,
+                StartDate = section.StartDate,
+                FinishDate = section.FinishDate,
+                TrainerSections = section.TrainerSections,
+                StudentSections = studentSections
+            };
+
+            _context.Add(newSection);
+            _context.AddRange(newSection.StudentSections);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
